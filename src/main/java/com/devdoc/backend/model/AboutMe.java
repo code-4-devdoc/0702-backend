@@ -15,7 +15,9 @@ public class AboutMe {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
+    @Column(length = 500000)
     private String photo;
+    
     private String name;
     private String birthday;
     private String email;
