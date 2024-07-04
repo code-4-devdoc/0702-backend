@@ -7,6 +7,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/resumes")
 public class LanguageController {
@@ -18,7 +20,7 @@ public class LanguageController {
 
     // language 데이터 저장 또는 수정
     @PostMapping("/{resumeId}/languages")
-    public ResponseEntity<LanguageDTO> saveOrUpdateLanguage(@PathVariable int resumeId, @RequestBody LanguageDTO languageDTO) {
+    public ResponseEntity<LanguageDTO> saveOrUpdateLanguage(@PathVariable("resumeId") int resumeId, @RequestBody LanguageDTO languageDTO) {
         try {
             LanguageDTO updatedLanguage = languageService.saveOrUpdateLanguage(resumeId, languageDTO);
             return ResponseEntity.ok(updatedLanguage); // 업데이트된 language 데이터 반환
@@ -29,7 +31,7 @@ public class LanguageController {
 
     // language 데이터 삭제
     @DeleteMapping("/{resumeId}/languages/{languageId}")
-    public ResponseEntity<Void> deleteLanguage(@PathVariable int resumeId, @PathVariable int languageId) {
+    public ResponseEntity<Void> deleteLanguage(@PathVariable("resumeId") int resumeId, @PathVariable("languageId") int languageId) {
         try {
             languageService.deleteLanguage(resumeId, languageId);
             return ResponseEntity.noContent().build(); // language 데이터 삭제 후 no content 반환
@@ -40,7 +42,7 @@ public class LanguageController {
 
     // language 데이터 수정
     @PutMapping("/{resumeId}/languages")
-    public ResponseEntity<LanguageDTO> updateLanguage(@PathVariable int resumeId, @RequestBody LanguageDTO languageDTO) {
+    public ResponseEntity<LanguageDTO> updateLanguage(@PathVariable("resumeId") int resumeId, @RequestBody LanguageDTO languageDTO) {
         try {
             LanguageDTO updatedLanguage = languageService.saveOrUpdateLanguage(resumeId, languageDTO);
             return ResponseEntity.ok(updatedLanguage); // 수정된 language 데이터 반환
@@ -49,4 +51,19 @@ public class LanguageController {
         }
     }
 
+
+    // 특정 Resume의 모든 Language 조회
+    @GetMapping("/{resumeId}/languages")
+    public ResponseEntity<List<LanguageDTO>> getLanguagesByResumeId(@PathVariable("resumeId") int resumeId) {
+        try {
+            List<LanguageDTO> languages = languageService.getLanguagesByResumeId(resumeId);
+            if (languages != null) {
+                return new ResponseEntity<>(languages, HttpStatus.OK);
+            } else {
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            }
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 }

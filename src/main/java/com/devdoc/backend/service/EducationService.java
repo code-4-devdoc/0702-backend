@@ -9,7 +9,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class EducationService {
@@ -51,5 +53,17 @@ public class EducationService {
     public void deleteEducation(int resumeId, int educationId) {
         Optional<Education> education = educationRepository.findByIdAndResumeId(educationId, resumeId);
         education.ifPresent(educationRepository::delete);
+    }
+
+    // 특정 Resume의 모든 Education 조회
+    public List<EducationDTO> getEducationsByResumeId(int resumeId) {
+        Optional<Resume> optionalResume = resumeRepository.findById(resumeId);
+        if (optionalResume.isPresent()) {
+            Resume resume = optionalResume.get();
+            return resume.getEducations().stream()
+                    .map(education -> new EducationDTO(education.getId(), education.getSchoolName(), education.getMajor(), education.getStartDate(), education.getEndDate(), education.getStatus(), education.getEducationType()))
+                    .collect(Collectors.toList());
+        }
+        return null;
     }
 }

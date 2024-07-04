@@ -9,7 +9,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class LanguageService {
@@ -49,5 +51,17 @@ public class LanguageService {
     public void deleteLanguage(int resumeId, int languageId) {
         Optional<Language> language = languageRepository.findByIdAndResumeId(languageId, resumeId);
         language.ifPresent(languageRepository::delete);
+    }
+
+    // 특정 Resume의 모든 Language 조회
+    public List<LanguageDTO> getLanguagesByResumeId(int resumeId) {
+        Optional<Resume> optionalResume = resumeRepository.findById(resumeId);
+        if (optionalResume.isPresent()) {
+            Resume resume = optionalResume.get();
+            return resume.getLanguages().stream()
+                    .map(language -> new LanguageDTO(language.getId(), language.getLanguage(), language.getTestName(), language.getScore(), language.getDate()))
+                    .collect(Collectors.toList());
+        }
+        return null;
     }
 }

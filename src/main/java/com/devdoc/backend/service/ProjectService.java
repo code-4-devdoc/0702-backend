@@ -9,7 +9,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class ProjectService {
@@ -52,5 +54,17 @@ public class ProjectService {
     public void deleteProject(int resumeId, int projectId) {
         Optional<Project> project = projectRepository.findByIdAndResumeId(projectId, resumeId);
         project.ifPresent(projectRepository::delete);
+    }
+
+    // 특정 Resume의 모든 Project 조회
+    public List<ProjectDTO> getProjectsByResumeId(int resumeId) {
+        Optional<Resume> optionalResume = resumeRepository.findById(resumeId);
+        if (optionalResume.isPresent()) {
+            Resume resume = optionalResume.get();
+            return resume.getProjects().stream()
+                    .map(project -> new ProjectDTO(project.getId(), project.getTitle(), project.getStartDate(), project.getEndDate(), project.getIsCurrent(), project.getIntro(), project.getTechStack(), project.getDescription()))
+                    .collect(Collectors.toList());
+        }
+        return null;
     }
 }

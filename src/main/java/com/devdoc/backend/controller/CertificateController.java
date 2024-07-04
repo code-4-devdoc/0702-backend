@@ -8,6 +8,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/resumes")
 public class CertificateController {
@@ -17,7 +19,7 @@ public class CertificateController {
 
     // Certificate 데이터 저장
     @PostMapping("/{resumeId}/certificates")
-    public ResponseEntity<CertificateDTO> saveOrUpdateCertificate(@PathVariable int resumeId, @RequestBody CertificateDTO certificateDTO) {
+    public ResponseEntity<CertificateDTO> saveOrUpdateCertificate(@PathVariable("resumeId") int resumeId, @RequestBody CertificateDTO certificateDTO) {
         try {
             // 입력 받은 내용을 CertificateDTO를 통해 전달
             CertificateDTO updatedCertificate = certificateService.saveOrUpdateCertificate(resumeId, certificateDTO);
@@ -29,7 +31,7 @@ public class CertificateController {
 
     // Certificate 데이터 삭제
     @DeleteMapping("/{resumeId}/certificates/{certificateId}")
-    public ResponseEntity<Void> deleteCertificate(@PathVariable int resumeId, @PathVariable int certificateId) {
+    public ResponseEntity<Void> deleteCertificate(@PathVariable("resumeId") int resumeId, @PathVariable("certificateId") int certificateId) {
         try {
             certificateService.deleteCertificate(resumeId, certificateId); // 해당 Certificate 항목을 저장소에서 삭제
             return ResponseEntity.noContent().build();
@@ -40,12 +42,27 @@ public class CertificateController {
 
     // Certificate 데이터 수정
     @PutMapping("/{resumeId}/certificates")
-    public ResponseEntity<CertificateDTO> updateCertificate(@PathVariable int resumeId, @RequestBody CertificateDTO certificateDTO) {
+    public ResponseEntity<CertificateDTO> updateCertificate(@PathVariable("resumeId") int resumeId, @RequestBody CertificateDTO certificateDTO) {
         try {
             CertificateDTO updatedCertificate = certificateService.saveOrUpdateCertificate(resumeId, certificateDTO);
             return ResponseEntity.ok(updatedCertificate);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+
+    // 특정 Resume의 모든 Certificate 조회
+    @GetMapping("/{resumeId}/certificates")
+    public ResponseEntity<List<CertificateDTO>> getCertificatesByResumeId(@PathVariable("resumeId") int resumeId) {
+        try {
+            List<CertificateDTO> certificates = certificateService.getCertificatesByResumeId(resumeId);
+            if (certificates != null) {
+                return new ResponseEntity<>(certificates, HttpStatus.OK);
+            } else {
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            }
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 }

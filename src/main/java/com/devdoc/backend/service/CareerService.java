@@ -10,7 +10,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class CareerService {
@@ -53,5 +55,17 @@ public class CareerService {
     public void deleteCareer(int resumeId, int careerId) {
         Optional<Career> career = careerRepository.findByIdAndResumeId(careerId, resumeId);
         career.ifPresent(careerRepository::delete);
+    }
+
+    // 특정 Resume의 모든 Career 조회
+    public List<CareerDTO> getCareersByResumeId(int resumeId) {
+        Optional<Resume> optionalResume = resumeRepository.findById(resumeId);
+        if (optionalResume.isPresent()) {
+            Resume resume = optionalResume.get();
+            return resume.getCareers().stream()
+                    .map(career -> new CareerDTO(career.getId(), career.getCompany(), career.getDepartment(), career.getStartDate(), career.getEndDate(), career.getIsCurrent(), career.getTechStack(), career.getDescription()))
+                    .collect(Collectors.toList());
+        }
+        return null;
     }
 }

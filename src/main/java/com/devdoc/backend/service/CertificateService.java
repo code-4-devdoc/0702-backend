@@ -9,7 +9,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class CertificateService {
@@ -51,5 +53,17 @@ public class CertificateService {
     public void deleteCertificate(int resumeId, int certificateId) {
         Optional<Certificate> certificate = certificateRepository.findByIdAndResumeId(certificateId, resumeId);
         certificate.ifPresent(certificateRepository::delete);
+    }
+
+    // 특정 Resume의 모든 Certificate 조회
+    public List<CertificateDTO> getCertificatesByResumeId(int resumeId) {
+        Optional<Resume> optionalResume = resumeRepository.findById(resumeId);
+        if (optionalResume.isPresent()) {
+            Resume resume = optionalResume.get();
+            return resume.getCertificates().stream()
+                    .map(certificate -> new CertificateDTO(certificate.getId(), certificate.getCertificateName(), certificate.getIssuer(), certificate.getIssueDate()))
+                    .collect(Collectors.toList());
+        }
+        return null;
     }
 }

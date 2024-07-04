@@ -52,4 +52,19 @@ public class AboutMeService {
         Optional<AboutMe> aboutMe = aboutMeRepository.findByIdAndResumeId(aboutMeId, resumeId);
         aboutMe.ifPresent(aboutMeRepository::delete);
     }
+
+    // AboutMe 항목 데이터 조회
+    @Transactional
+    public AboutMeDTO getAboutMeByResumeId(int resumeId) {
+        Optional<Resume> optionalResume = resumeRepository.findById(resumeId);
+        if (optionalResume.isPresent()) {
+            Resume resume = optionalResume.get();
+            Optional<AboutMe> aboutMe = aboutMeRepository.findByResume(resume);
+            if (aboutMe.isPresent()) {
+                AboutMe am = aboutMe.get();
+                return new AboutMeDTO(am.getId(), am.getPhoto(), am.getName(), am.getBirthday(), am.getEmail(), am.getGithub(), am.getPhoneNumber(), am.getBlog(), am.getIntroduction());
+            }
+        }
+        return null;
+    }
 }

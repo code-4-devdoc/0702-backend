@@ -23,7 +23,7 @@ public class ResumeController {
 
     // 이력서 저장
     @PostMapping("/{resumeId}/save")
-    public ResponseEntity<?> saveResume(@PathVariable int resumeId, @RequestBody ResumeDTO resumeDTO) {
+    public ResponseEntity<?> saveResume(@PathVariable("resumeId") int resumeId, @RequestBody ResumeDTO resumeDTO) {
         try {
             resumeService.saveResume(resumeId, resumeDTO);
             return new ResponseEntity<>(HttpStatus.OK); // 이력서 저장 후 200 반환
@@ -34,7 +34,7 @@ public class ResumeController {
 
     // 이력서 데이터 불러오기
     @GetMapping("/{resumeId}")
-    public ResponseEntity<ResumeDTO> getResumeByResumeId(@PathVariable int resumeId) {
+    public ResponseEntity<ResumeDTO> getResumeByResumeId(@PathVariable("resumeId") int resumeId) {
         try {
             ResumeDTO resumeDTO = resumeService.getResumeByResumeId(resumeId);
             if (resumeDTO != null) {
@@ -43,6 +43,7 @@ public class ResumeController {
                 return new ResponseEntity<>(HttpStatus.NOT_FOUND);
             }
         } catch (Exception e) {
+            e.printStackTrace(); // 예외 스택 추적 로그
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
@@ -51,7 +52,9 @@ public class ResumeController {
     @GetMapping
     public ResponseEntity<List<ResumeDTO>> getAllResumesByUser(@AuthenticationPrincipal String userId) {
         try {
+            System.out.println("Fetching all resumes for user: " + userId); // 로그 추가
             List<ResumeDTO> resumes = resumeService.getAllResumesByUser(userId);
+            System.out.println("Fetched Resumes: " + resumes); // 로그 추가
             return new ResponseEntity<>(resumes, HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
@@ -71,7 +74,7 @@ public class ResumeController {
 
     // ResumeId 삭제
     @DeleteMapping("/{resumeId}")
-    public ResponseEntity<Void> deleteResumeByResumeId(@PathVariable int resumeId) {
+    public ResponseEntity<Void> deleteResumeByResumeId(@PathVariable("resumeId") int resumeId) {
         try {
             resumeService.deleteResumeByResumeId(resumeId);
             return ResponseEntity.noContent().build();
@@ -83,7 +86,7 @@ public class ResumeController {
     // ResumeId 업데이트 : Title만
     @PutMapping("/{resumeId}/title")
     public ResponseEntity<ResumeDTO> saveResumeTitleByResumeId(
-            @PathVariable int resumeId,
+            @PathVariable("resumeId") int resumeId,
             @RequestBody String newTitle) {
         try {
             ResumeDTO updatedResume = resumeService.saveResumeTitleByResumeId(resumeId, newTitle);
@@ -95,5 +98,11 @@ public class ResumeController {
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
+    }
+
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<String> handleException(Exception e) {
+        e.printStackTrace(); // 예외 스택 추적 로그
+        return new ResponseEntity<>("An error occurred: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }

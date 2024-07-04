@@ -9,7 +9,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class SkillService {
@@ -47,5 +49,17 @@ public class SkillService {
     public void deleteSkill(int resumeId, int skillId) {
         Optional<Skill> skill = skillRepository.findByIdAndResumeId(skillId, resumeId);
         skill.ifPresent(skillRepository::delete);
+    }
+
+    // 특정 Resume의 모든 Skill 조회
+    public List<SkillDTO> getSkillsByResumeId(int resumeId) {
+        Optional<Resume> optionalResume = resumeRepository.findById(resumeId);
+        if (optionalResume.isPresent()) {
+            Resume resume = optionalResume.get();
+            return resume.getSkills().stream()
+                    .map(skill -> new SkillDTO(skill.getId(), skill.getTechStack(), skill.getDescription()))
+                    .collect(Collectors.toList());
+        }
+        return null;
     }
 }

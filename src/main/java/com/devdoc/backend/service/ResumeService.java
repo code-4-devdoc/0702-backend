@@ -113,44 +113,69 @@ public class ResumeService {
         Optional<Resume> optionalResume = resumeRepository.findById(resumeId);
         if (optionalResume.isPresent()) {
             Resume resume = optionalResume.get();
+            System.out.println("Found resume with title: " + resume.getTitle()); // 로그 추가
 
             List<LanguageDTO> languageDTOs = resume.getLanguages().stream()
                     .map(language -> new LanguageDTO(language.getId(), language.getLanguage(), language.getTestName(), language.getScore(), language.getDate()))
                     .collect(Collectors.toList());
+            System.out.println("Languages: " + languageDTOs); // 로그 추가
 
             List<AwardDTO> awardDTOs = resume.getAwards().stream()
                     .map(award -> new AwardDTO(award.getId(), award.getAwardName(), award.getAwardingInstitution(), award.getDate(), award.getDescription()))
                     .collect(Collectors.toList());
+            System.out.println("Awards: " + awardDTOs); // 로그 추가
 
             List<CertificateDTO> certificateDTOs = resume.getCertificates().stream()
                     .map(certificate -> new CertificateDTO(certificate.getId(), certificate.getCertificateName(), certificate.getIssuer(), certificate.getIssueDate()))
                     .collect(Collectors.toList());
+            System.out.println("Certificates: " + certificateDTOs); // 로그 추가
 
             List<SkillDTO> skillDTOs = resume.getSkills().stream()
                     .map(skill -> new SkillDTO(skill.getId(), skill.getTechStack(), skill.getDescription()))
                     .collect(Collectors.toList());
+            System.out.println("Skills: " + skillDTOs); // 로그 추가
 
             List<CareerDTO> careerDTOs = resume.getCareers().stream()
                     .map(career -> new CareerDTO(career.getId(), career.getCompany(), career.getDepartment(), career.getStartDate(), career.getEndDate(), career.getIsCurrent(), career.getTechStack(), career.getDescription()))
                     .collect(Collectors.toList());
+            System.out.println("Careers: " + careerDTOs); // 로그 추가
+
 
             List<ProjectDTO> projectDTOs = resume.getProjects().stream()
                     .map(project -> new ProjectDTO(project.getId(), project.getTitle(), project.getStartDate(), project.getEndDate(), project.getIsCurrent(), project.getIntro(), project.getTechStack(), project.getDescription()))
                     .collect(Collectors.toList());
+            System.out.println("Projects: " + projectDTOs); // 로그 추가
 
             List<ActivityDTO> activityDTOS = resume.getActivities().stream()
                     .map(activity -> new ActivityDTO(activity.getId(), activity.getActivityName(), activity.getOrganizationName(), activity.getStartDate(), activity.getEndDate(), activity.getIsCurrent()))
                     .collect(Collectors.toList());
+            System.out.println("Activities: " + activityDTOS); // 로그 추가
 
             List<TrainingDTO> trainingDTOS = resume.getTrainings().stream()
                     .map(training -> new TrainingDTO(training.getId(), training.getCourseName(), training.getInstitution(), training.getStartDate(), training.getEndDate(), training.getIsCurrent()))
                     .collect(Collectors.toList());
+            System.out.println("Trainings: " + trainingDTOS); // 로그 추가
 
-            AboutMeDTO aboutMeDTO = new AboutMeDTO(resume.getAboutMe().getId(), resume.getAboutMe().getPhoto(), resume.getAboutMe().getName(), resume.getAboutMe().getBirthday(), resume.getAboutMe().getEmail(), resume.getAboutMe().getGithub(), resume.getAboutMe().getPhoneNumber(), resume.getAboutMe().getBlog(), resume.getAboutMe().getIntroduction());
+            AboutMeDTO aboutMeDTO = null;
+            if (resume.getAboutMe() != null) {
+                aboutMeDTO = new AboutMeDTO(
+                        resume.getAboutMe().getId(),
+                        resume.getAboutMe().getPhoto(),
+                        resume.getAboutMe().getName(),
+                        resume.getAboutMe().getBirthday(),
+                        resume.getAboutMe().getEmail(),
+                        resume.getAboutMe().getGithub(),
+                        resume.getAboutMe().getPhoneNumber(),
+                        resume.getAboutMe().getBlog(),
+                        resume.getAboutMe().getIntroduction()
+                );
+            }
+            System.out.println("About Me: " + aboutMeDTO); // 로그 추가
 
             List<EducationDTO> educationDTOS = resume.getEducations().stream()
                     .map(education -> new EducationDTO(education.getId(), education.getSchoolName(), education.getMajor(), education.getStartDate(), education.getEndDate(), education.getStatus(), education.getEducationType()))
                     .collect(Collectors.toList());
+            System.out.println("Educations: " + educationDTOS); // 로그 추가
 
             return new ResumeDTO(resume.getId(), resume.getTitle(), resume.getCreatedAt(), languageDTOs, awardDTOs, certificateDTOs, skillDTOs, careerDTOs, projectDTOs, activityDTOS, trainingDTOS, aboutMeDTO, educationDTOS);
         }
