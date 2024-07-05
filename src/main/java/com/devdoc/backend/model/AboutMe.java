@@ -15,6 +15,7 @@ public class AboutMe {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
+    @Column(length = 500000)
     private String photo;
     private String name;
     private String birthday;
@@ -24,7 +25,7 @@ public class AboutMe {
     private String blog;
     private String introduction;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "resume_id")
     private Resume resume;
 }

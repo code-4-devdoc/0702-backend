@@ -50,7 +50,7 @@ public class Resume {
     private List<Training> trainings;
 
     @OneToOne(mappedBy = "resume", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private AboutMe aboutMe; // 이력서에 포함된 AboutMe 항목
+    private AboutMe aboutMe;
 
     @OneToMany(mappedBy = "resume", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Education> educations;

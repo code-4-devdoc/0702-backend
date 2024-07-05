@@ -19,7 +19,6 @@ configurations {
 	}
 }
 
-
 repositories {
 	mavenCentral()
 }
@@ -47,11 +46,24 @@ dependencies {
 	//runtimeOnly 'mysql:mysql-connector-java:8.0.30'
 }
 
-tasks.named('test') {
-	useJUnitPlatform()
-}
+task('release') {
+	dependsOn("build")
 
-bootJar {
-	archivesBaseName='backend-0.0.1'
-	archiveFileName='backend-0.0.1.jar'
+	doLast {
+		def stdout = new ByteArrayOutputStream()
+
+		// eb setenv 명령어 실행
+		exec {
+			commandLine 'eb', 'setenv', 'SPRING_PROFILES_ACTIVE=prod'
+			standardOutput = stdout
+		}
+
+
+		// eb deploy 명령어 실행
+		exec {
+			commandLine 'eb', 'deploy'
+			standardOutput = stdout
+		}
+
+	}
 }
