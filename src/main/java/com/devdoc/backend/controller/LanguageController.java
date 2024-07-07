@@ -2,6 +2,8 @@ package com.devdoc.backend.controller;
 
 import com.devdoc.backend.dto.LanguageDTO;
 import com.devdoc.backend.service.LanguageService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -9,14 +11,13 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/resumes")
+@Tag(name = "Language Management", description = "어학(Language) 항목 관리 API")
 public class LanguageController {
-
 
     @Autowired
     private LanguageService languageService;
 
-
-    // language 데이터 저장 또는 수정
+    @Operation(summary = "어학 저장 또는 수정")
     @PostMapping("/{resumeId}/languages")
     public ResponseEntity<LanguageDTO> saveOrUpdateLanguage(@PathVariable int resumeId, @RequestBody LanguageDTO languageDTO) {
         try {
@@ -27,7 +28,7 @@ public class LanguageController {
         }
     }
 
-    // language 데이터 삭제
+    @Operation(summary = "어학 삭제")
     @DeleteMapping("/{resumeId}/languages/{languageId}")
     public ResponseEntity<Void> deleteLanguage(@PathVariable int resumeId, @PathVariable int languageId) {
         try {
@@ -38,7 +39,7 @@ public class LanguageController {
         }
     }
 
-    // language 데이터 수정
+    @Operation(summary = "어학 수정")
     @PutMapping("/{resumeId}/languages")
     public ResponseEntity<LanguageDTO> updateLanguage(@PathVariable int resumeId, @RequestBody LanguageDTO languageDTO) {
         try {
@@ -48,5 +49,4 @@ public class LanguageController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
-
 }

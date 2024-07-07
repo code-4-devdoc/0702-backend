@@ -2,6 +2,8 @@ package com.devdoc.backend.controller;
 
 import com.devdoc.backend.dto.AboutMeDTO;
 import com.devdoc.backend.service.AboutMeService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -9,12 +11,13 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/resumes")
+@Tag(name = "AboutMe Management", description = "프로필(AboutMe) 항목 관리 API")
 public class AboutMeController {
 
     @Autowired
     private AboutMeService aboutMeService;
 
-    // AboutMe 데이터 저장 또는 수정
+    @Operation(summary = "프로필 저장 또는 수정")
     @PostMapping("/{resumeId}/aboutMes")
     public ResponseEntity<AboutMeDTO> saveOrUpdateAboutMe(@PathVariable int resumeId, @RequestBody AboutMeDTO aboutMeDTO) {
         try {
@@ -25,7 +28,7 @@ public class AboutMeController {
         }
     }
 
-    // AboutMe 데이터 삭제
+    @Operation(summary = "프로필 삭제")
     @DeleteMapping("/{resumeId}/aboutMes/{aboutMeId}")
     public ResponseEntity<Void> deleteAboutMe(@PathVariable int resumeId, @PathVariable int aboutMeId) {
         try {
@@ -36,7 +39,7 @@ public class AboutMeController {
         }
     }
 
-    // AboutMe 데이터 수정
+    @Operation(summary = "프로필 수정")
     @PutMapping("/{resumeId}/aboutMes")
     public ResponseEntity<AboutMeDTO> updateAboutMe(@PathVariable int resumeId, @RequestBody AboutMeDTO aboutMeDTO) {
         try {

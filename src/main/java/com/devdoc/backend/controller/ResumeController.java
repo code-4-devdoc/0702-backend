@@ -1,11 +1,11 @@
-// ResumeController.java
 package com.devdoc.backend.controller;
 
-import com.devdoc.backend.dto.AwardDTO;
-import com.devdoc.backend.dto.LanguageDTO;
+
 import com.devdoc.backend.dto.ResumeDTO;
 import com.devdoc.backend.model.Resume;
 import com.devdoc.backend.service.ResumeService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,12 +16,13 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/resumes")
+@Tag(name = "Resume Management", description = "이력서 항목 관리 API")
 public class ResumeController {
 
     @Autowired
     private ResumeService resumeService;
 
-    // 이력서 저장
+    @Operation(summary = "이력서 저장")
     @PostMapping("/{resumeId}/save")
     public ResponseEntity<?> saveResume(@PathVariable int resumeId, @RequestBody ResumeDTO resumeDTO) {
         try {
@@ -32,7 +33,7 @@ public class ResumeController {
         }
     }
 
-    // 이력서 데이터 불러오기
+    @Operation(summary = "이력서 불러오기")
     @GetMapping("/{resumeId}")
     public ResponseEntity<ResumeDTO> getResumeByResumeId(@PathVariable int resumeId) {
         try {
@@ -47,7 +48,7 @@ public class ResumeController {
         }
     }
 
-    // User 의 Resume 목록 조회
+    @Operation(summary = "이력서 목록 조회")
     @GetMapping
     public ResponseEntity<List<ResumeDTO>> getAllResumesByUser(@AuthenticationPrincipal String userId) {
         try {
@@ -58,7 +59,7 @@ public class ResumeController {
         }
     }
 
-    // ResumeId 생성 : SkillId x3 생성
+    @Operation(summary = "이력서 생성")
     @PostMapping
     public ResponseEntity<Resume> createResume(@RequestBody String title, @AuthenticationPrincipal String userId) {
         try {
@@ -69,7 +70,7 @@ public class ResumeController {
         }
     }
 
-    // ResumeId 삭제
+    @Operation(summary = "이력서 삭제")
     @DeleteMapping("/{resumeId}")
     public ResponseEntity<Void> deleteResumeByResumeId(@PathVariable int resumeId) {
         try {
@@ -80,7 +81,7 @@ public class ResumeController {
         }
     }
 
-    // ResumeId 업데이트 : Title만
+    @Operation(summary = "이력서 제목 업데이트", description = "이력서 제목을 업데이트합니다.")
     @PutMapping("/{resumeId}/title")
     public ResponseEntity<ResumeDTO> saveResumeTitleByResumeId(
             @PathVariable int resumeId,

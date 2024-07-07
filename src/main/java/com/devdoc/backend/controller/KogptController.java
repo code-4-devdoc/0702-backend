@@ -3,6 +3,8 @@ package com.devdoc.backend.controller;
 import com.devdoc.backend.dto.PromptRequest;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -19,6 +21,7 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/api/kogpt")
+@Tag(name = "Kogpt API", description = "Kakao GPT API")
 public class KogptController {
 
     @Value("${kakao.api.key}")
@@ -34,6 +37,7 @@ public class KogptController {
 
     private static final Logger logger = LoggerFactory.getLogger(KogptController.class);
 
+    @Operation(summary = "텍스트 생성", description = "프롬프트를 기반으로 텍스트를 생성.")
     @PostMapping("/generate") // HTTP 요청 본문을 'PromptRequest' 클래스 인스턴스로 변환
     public ResponseEntity<?> generateText(@RequestBody PromptRequest request) {
         // API 키 유효성 검사
@@ -44,7 +48,6 @@ public class KogptController {
         }
 
         try {
-
             // 요청 헤더 설정
             String apiUrl = "https://api.kakaobrain.com/v1/inference/kogpt/generation";
             HttpHeaders headers = new HttpHeaders();

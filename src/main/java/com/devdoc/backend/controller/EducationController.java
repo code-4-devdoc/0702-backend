@@ -2,6 +2,8 @@ package com.devdoc.backend.controller;
 
 import com.devdoc.backend.dto.EducationDTO;
 import com.devdoc.backend.service.EducationService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -9,12 +11,13 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/resumes")
+@Tag(name = "Education Management", description = "학력(Education) 항목 관리 API")
 public class EducationController {
 
     @Autowired
     private EducationService educationService;
 
-    // Education 데이터 저장 또는 수정
+    @Operation(summary = "학력 저장 또는 수정")
     @PostMapping("/{resumeId}/educations")
     public ResponseEntity<EducationDTO> saveOrUpdateEducation(@PathVariable int resumeId, @RequestBody EducationDTO educationDTO) {
         try {
@@ -25,7 +28,7 @@ public class EducationController {
         }
     }
 
-    // Education 데이터 삭제
+    @Operation(summary = "학력 삭제")
     @DeleteMapping("/{resumeId}/educations/{educationId}")
     public ResponseEntity<Void> deleteEducation(@PathVariable int resumeId, @PathVariable int educationId) {
         try {
@@ -36,7 +39,7 @@ public class EducationController {
         }
     }
 
-    // Education 데이터 수정
+    @Operation(summary = "학력 수정")
     @PutMapping("/{resumeId}/educations")
     public ResponseEntity<EducationDTO> updateEducation(@PathVariable int resumeId, @RequestBody EducationDTO educationDTO) {
         try {

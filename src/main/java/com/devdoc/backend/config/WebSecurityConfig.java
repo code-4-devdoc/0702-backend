@@ -36,7 +36,7 @@ public class WebSecurityConfig {
 				.httpBasic(httpBasic -> httpBasic.disable()) // HTTP Basic 인증을 비활성화
 				.sessionManagement(sessionManagement -> sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) // 세션을 사용하지 않음
 				.authorizeHttpRequests(authorize -> authorize
-						.requestMatchers("/**", "/api/kogpt/generate").permitAll() // 특정 경로는 인증 없이 접근 허용
+						.requestMatchers("/**", "/api/kogpt/generate", "/swagger-ui/**", "/v3/api-docs/**").permitAll() // 특정 경로는 인증 없이 접근 허용
 						.anyRequest().authenticated() // 나머지 모든 요청은 인증 필요
 				)
 				.headers(headers -> headers

@@ -1,26 +1,23 @@
 package com.devdoc.backend.controller;
 
-
 import com.devdoc.backend.dto.ResponseDTO;
 import com.devdoc.backend.dto.UserDTO;
 import com.devdoc.backend.model.UserEntity;
 import com.devdoc.backend.security.TokenProvider;
 import com.devdoc.backend.service.UserService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
-// UserController: 사용자 인증 및 회원가입 처리
+import org.springframework.web.bind.annotation.*;
 
 @Slf4j
 @RestController
 @RequestMapping("/auth")
+@Tag(name = "User Authentication", description = "사용자 인증 및 회원가입 API")
 public class UserController {
 
 	@Autowired
@@ -31,7 +28,7 @@ public class UserController {
 
 	private PasswordEncoder passwordEncoder = new BCryptPasswordEncoder(); // 비밀번호 인코더
 
-	// 회원가입 처리
+	@Operation(summary = "회원가입 처리")
 	@PostMapping("/signup")
 	public ResponseEntity<?> registerUser(@RequestBody UserDTO userDTO) {
 		try {
@@ -66,7 +63,7 @@ public class UserController {
 		}
 	}
 
-	// 로그인 처리
+	@Operation(summary = "로그인 처리")
 	@PostMapping("/signin")
 	public ResponseEntity<?> authenticate(@RequestBody UserDTO userDTO) {
 		// 사용자 인증
@@ -102,3 +99,4 @@ public class UserController {
 		}
 	}
 }
+
