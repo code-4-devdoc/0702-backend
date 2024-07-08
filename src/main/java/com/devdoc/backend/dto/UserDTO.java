@@ -17,21 +17,21 @@ import java.time.LocalDateTime;
 @Schema(description = "사용자 정보와 인증 토큰을 담는 DTO")
 public class UserDTO {
 
-	@Schema(description = "사용자 고유 ID", example = "1")
+	@Schema(description = "사용자 고유 ID", example = "1", hidden = true)
 	private String id;
 
-	@Schema(description = "JWT 토큰", example = "eyJhbXVCJ9...")
+	@Schema(description = "JWT 토큰", example = "eyJhbXVCJ9...", hidden = true)
 	private String token;
 
-	@Schema(description = "닉네임", example = "mynickname")
+	@Schema(description = "사용자 닉네임", example = "mynickname")
 	private String username;
 
-	@Schema(description = "비밀번호", example = "mypassword11!")
+	@Schema(description = "사용자 비밀번호", example = "mypassword11!")
 	private String password;
 
-	@Schema(description = "이메일", example = "example1@example.com")
+	@Schema(description = "사용자 이메일", example = "example1@example.com")
 	private String email;
 
-	@Schema(description = "생성일자", example = "2024-07-05T10:15:30")
+	@Schema(description = "생성일자", example = "2024-07-05T10:15:30", hidden = true)
 	private LocalDateTime createdAt;
 }

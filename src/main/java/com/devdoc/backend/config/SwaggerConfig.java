@@ -16,6 +16,7 @@ public class SwaggerConfig {
                         .title("DevDoc API")
                         .version("0.0.1")
                         .description("Spring Boot 기반의 DevDoc 프로젝트에 대한 API 문서입니다."))
-                .addServersItem(new Server().url("https://api.dev-doc.co.kr"));
+                .addServersItem(new Server().url("https://api.dev-doc.co.kr"))
+                .addServersItem(new Server().url("http://localhost:8080"));
     }
 }
